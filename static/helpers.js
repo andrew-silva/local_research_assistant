@@ -154,6 +154,17 @@ async function handleChat() {
     }
 }
 
+function adjustChatHeight() {
+    const chatContainer = document.getElementById('chatContainer');
+    const messages = chatContainer.querySelectorAll('.chat-message');
+
+    if (messages.length > 1) {
+        chatContainer.classList.add('expanded');
+    } else {
+        chatContainer.classList.remove('expanded');
+    }
+}
+
 function addChatMessage(text, isUser) {
     const chatContainer = document.getElementById('chatContainer');
     const messageDiv = document.createElement('div');
@@ -166,7 +177,7 @@ function addChatMessage(text, isUser) {
     messageDiv.innerHTML = text.replace(/\n/g, '<br />');
 
     chatContainer.appendChild(messageDiv);
-
+    adjustChatHeight();
     // Auto-scroll to the bottom
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }

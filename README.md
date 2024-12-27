@@ -31,12 +31,29 @@ git clone https://github.com/andrew-silva/local_research_assistant.git
 cd local_research_assistant
 pip install -r requirements.txt
 ```
-2. Start the application
+2. Make sure Ollama is running
+``` bash
+ollama run llama3.2
+```
+3. Start the application
 ```bash
 python app.py
 ```
 
 Visit `http://localhost:5000` in your browser to start exploring academic literature!
+
+## ⚙️ Config / Settings
+`config.py` holds all of the different hyperparameters for your assistant, including:
+* `SEMANTIC_API_KEY`: If you have an API key, you are less rate-limited, so use it here. Note that a key isn't required.
+* `OLLAMA_API_URL`: Defaults to http://localhost:11434/api/generate, which should be fine. Change it if you have a different local endpoint.
+* `OLLAMA_MODEL`: Defaults to `llama3.2`, change it if you're  running a different model.
+* `CACHE_SIZE`: Cache for API calls, not really super important. Defaults to 100
+* `DEFAULT_YEAR_FILTER`: Default year cutoff for looking back in time (for API calls). Not super important and can be set in the UI. Defaults to 2020
+* `PAPERS_PER_PAGE`: Number of papers that come back per search query. More papers means more results! Defaults to 20.
+* `MAX_PAGES`: Number of "pages" (multiples of `PAPERS_PER_PAGE`) that you'll get with API calls. More pages means more results! Defaults to 1.
+* `MAX_RETRIES`: For various web-calls, number of re-tries before accepting failure. Defaults to 5.
+* `TIMEOUT`: Number of seconds before deciding a web-call is failed. Defaults to 300 (5 minutes) because local LLMs can be slow.
+* `RELEVANT_PAPERS_FOR_FUTURE_WORK`: When generating future work ideas, this sets how many relevant paper summaries we will use. Defaults to 10.
 
 ## 💡 Usage
 
@@ -64,8 +81,8 @@ Visit `http://localhost:5000` in your browser to start exploring academic litera
 - **APIs/Search**: Semantic Scholar
 - **AI**: Local LLM via Ollama
 - **PDF Processing**: PyPDF2
-
-## 📝 License
+ 
+## 📝 License 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

@@ -64,7 +64,7 @@ def process_pdf():
             return jsonify({'error': 'Failed to download PDF'}), 400
 
         # Save the PDF locally
-        pdf_path = '/tmp/temp_paper.pdf'
+        pdf_path = '.temp_paper.pdf'
         with open(pdf_path, 'wb') as f:
             f.write(response.content)
 
@@ -239,7 +239,8 @@ def stream_search():
                         }
                     }) + "\n"
 
-        # Send the rest of the papers on for summarization
+        # Send the rest of the papers
+        unsummarized = []
         for paper in papers_needing_summary:
             paper_id = paper.get("paperId")
             try:
@@ -249,7 +250,14 @@ def stream_search():
                     "data": {"paper_id": paper_id, "summary": summary}
                 }) + "\n"
             except Exception as e:
+                unsummarized.append(paper)
                 logger.error(f"Error summarizing paper {paper_id}: {e}")
+        for paper in unsummarized:
+            paper_id = paper.get("paperId")
+            yield json.dumps({
+                "type": "summary",
+                "data": {"paper_id": paper_id, "summary": "No summary available."}
+            }) + "\n"
 
     return Response(
         stream_with_context(generate()),
